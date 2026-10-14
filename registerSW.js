@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/frame-composer/sw.js', { scope: '/frame-composer/' })})}
