@@ -1,0 +1,109 @@
+Add a non-destructive crop editor to the existing Frame Composer app.
+
+IMPORTANT:
+- Preserve the current approved UI and all existing functionality.
+- Do not redesign the application.
+- Add cropping as an additional photo-editing function.
+
+# CROP BEHAVIOR
+
+Cropping must work independently for each uploaded photo.
+
+The crop ratios must include:
+
+- Original
+- 1:1
+- 4:5
+- 5:4
+- 3:2
+- 2:3
+- 16:9
+- 9:16
+- 65:24
+- 4:3
+- 3:4
+
+Do not permanently modify the original uploaded image.
+
+Store crop settings such as:
+- selected crop ratio
+- crop position
+- zoom
+- crop rectangle
+
+The user must be able to reopen and adjust the crop later.
+
+# USER INTERFACE
+
+In the “Your photos” list, add a Crop/Edit button for each photo.
+
+When Crop is selected, open a clean crop editor.
+
+The crop editor should include:
+
+1. Large image preview
+2. Visible crop boundary
+3. Ratio selector using the ratios listed above
+4. Drag image to reposition inside the crop
+5. Zoom slider
+6. Reset Crop
+7. Cancel
+8. Apply Crop
+
+The crop frame must update immediately when a different ratio is selected.
+
+The crop editor should work well with mouse and touch.
+
+# IMAGE PIPELINE
+
+Use this processing order:
+
+Original Image
+→ Crop
+→ Layout slot
+→ Fit / Fill
+→ Canvas
+→ Export
+
+Existing Fit / No Crop and Fill / Crop controls must continue to work AFTER the selected crop is applied.
+
+Example:
+
+Original photo: 3:2
+Crop ratio: 65:24
+Canvas ratio: 5:4
+Layout: Triple Vertical
+
+The photo should first become a 65:24 cropped composition and then be positioned in the selected layout.
+
+# EXPORT
+
+JPG and PNG exports must use the crop settings at full export resolution.
+
+Do not export the low-resolution preview.
+
+Crop quality must remain high in exported files.
+
+# RESET
+
+“Original” should restore the full uncropped image.
+
+“Reset Crop” should reset:
+- ratio to Original
+- zoom
+- position
+
+# ACCEPTANCE TEST
+
+Test with three photos:
+
+- Crop each photo to 65:24
+- Canvas = 5:4
+- Layout = Triple Vertical
+- Fit / No Crop
+- White background
+
+The final export must show all three 65:24 crops stacked vertically inside the 5:4 canvas.
+
+Keep all processing local in the browser.
+Do not add backend, login, cloud upload, or database.

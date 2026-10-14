@@ -18,6 +18,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { PhotoList } from './components/PhotoList';
+import { CropEditor } from './components/CropEditor';
 import {
   createCanvasDimensions,
   downloadCanvas,
@@ -26,6 +27,7 @@ import {
   loadLocalPhoto,
   RATIO_PRESETS,
   type CompositionOptions,
+  type CropSettings,
   type FitMode,
   type Layout,
   type LoadedPhoto,
@@ -52,6 +54,7 @@ function App() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [exporting, setExporting] = useState(false);
+  const [editingPhotoId, setEditingPhotoId] = useState<string | null>(null);
 
   const options: CompositionOptions = {
     ratio,
@@ -162,11 +165,27 @@ function App() {
   }
 
   function removePhoto(id: string) {
+    if (editingPhotoId === id) setEditingPhotoId(null);
     setPhotos((current) => {
       const removed = current.find((photo) => photo.id === id);
       if (removed) URL.revokeObjectURL(removed.url);
       return current.filter((photo) => photo.id !== id);
     });
+  }
+
+  function applyPhotoCrop(id: string, crop: CropSettings) {
+    setPhotos((current) =>
+      current.map((photo) => {
+        if (photo.id !== id) return photo;
+        if (crop.ratio === 'Original' && crop.zoom === 1) {
+          const { crop: _previousCrop, ...originalPhoto } = photo;
+          return originalPhoto;
+        }
+        return { ...photo, crop };
+      }),
+    );
+    setEditingPhotoId(null);
+    setNotice('Crop applied to this photo.');
   }
 
   function movePhoto(id: string, direction: -1 | 1) {
@@ -223,6 +242,8 @@ function App() {
     }
     return <MoveHorizontal size={14} aria-hidden="true" />;
   }
+
+  const editingPhoto = photos.find((photo) => photo.id === editingPhotoId);
 
   return (
     <main className="app-shell">
@@ -441,6 +462,7 @@ function App() {
             onAdd={openPicker}
             onMove={movePhoto}
             onRemove={removePhoto}
+            onCrop={setEditingPhotoId}
           />
 
           <input
@@ -498,6 +520,14 @@ function App() {
         <div className="toast-message" role="status" data-testid="status-notice">
           {notice}
         </div>
+      )}
+      {editingPhoto && (
+        <CropEditor
+          key={editingPhoto.id}
+          photo={editingPhoto}
+          onCancel={() => setEditingPhotoId(null)}
+          onApply={(crop) => applyPhotoCrop(editingPhoto.id, crop)}
+        />
       )}
     </main>
   );

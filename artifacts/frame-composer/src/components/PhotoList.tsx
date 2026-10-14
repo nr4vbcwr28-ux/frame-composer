@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, ImagePlus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Crop, ImagePlus, Trash2 } from 'lucide-react';
 import type { LoadedPhoto } from '../lib/composition';
 
 interface PhotoListProps {
@@ -6,6 +6,7 @@ interface PhotoListProps {
   onAdd: () => void;
   onMove: (id: string, direction: -1 | 1) => void;
   onRemove: (id: string) => void;
+  onCrop: (id: string) => void;
 }
 
 export function PhotoList({
@@ -13,6 +14,7 @@ export function PhotoList({
   onAdd,
   onMove,
   onRemove,
+  onCrop,
 }: PhotoListProps) {
   return (
     <section className="photo-section" aria-label="Added photos">
@@ -39,6 +41,16 @@ export function PhotoList({
               <span className="photo-name" title={photo.name}>
                 {photo.name}
               </span>
+              <button
+                className={`photo-action crop-photo-action${photo.crop ? ' is-cropped' : ''}`}
+                type="button"
+                aria-label={`Crop/Edit ${photo.name}`}
+                title="Crop/Edit"
+                onClick={() => onCrop(photo.id)}
+                data-testid={`button-crop-photo-${photo.id}`}
+              >
+                <Crop size={14} aria-hidden="true" />
+              </button>
               <button
                 className="photo-action"
                 type="button"
