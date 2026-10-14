@@ -47,3 +47,17 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Secrets and local runtime files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.config/
+# Generated build and test output
+build/
+.vite/
+playwright-report/
+test-results/
+*.log
