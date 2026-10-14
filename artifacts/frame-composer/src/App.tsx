@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { PhotoList } from './components/PhotoList';
 import { CropEditor } from './components/CropEditor';
+import { isSupportedPhoto, PHOTO_PICKER_ACCEPT } from './lib/photo-files';
 import {
   createCanvasDimensions,
   downloadCanvas,
@@ -33,15 +34,10 @@ import {
   type LoadedPhoto,
 } from './lib/composition';
 
-const ACCEPTED_TYPES = new Set([
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-]);
-const ACCEPTED_EXTENSIONS = /\.(jpe?g|png|webp)$/i;
-
 function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const singlePhotoInputRef = useRef<HTMLInputElement>(null);
+  const browseFilesInputRef = useRef<HTMLInputElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const photosRef = useRef<LoadedPhoto[]>([]);
   const [photos, setPhotos] = useState<LoadedPhoto[]>([]);
@@ -103,11 +99,7 @@ function App() {
     event.currentTarget.value = '';
     if (!selectedFiles.length) return;
 
-    const validFiles = selectedFiles.filter((file) => {
-      const hasImageType = ACCEPTED_TYPES.has(file.type);
-      const hasImageExtension = ACCEPTED_EXTENSIONS.test(file.name);
-      return hasImageType && hasImageExtension;
-    });
+    const validFiles = selectedFiles.filter(isSupportedPhoto);
     const rejectedFiles = selectedFiles.filter((file) => !validFiles.includes(file));
 
     if (rejectedFiles.length) {
@@ -469,11 +461,33 @@ function App() {
             ref={fileInputRef}
             className="visually-hidden"
             type="file"
-            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+            accept={PHOTO_PICKER_ACCEPT}
             multiple
             onChange={handleFiles}
             data-testid="input-photo-files"
           />
+          <div className="photo-import-options">
+            <button className="button-secondary" type="button"
+              onClick={() => singlePhotoInputRef.current?.click()}
+              data-testid="button-add-one-photo">
+              Add one photo
+            </button>
+            <button className="button-secondary" type="button"
+              onClick={() => browseFilesInputRef.current?.click()}
+              data-testid="button-browse-files">
+              Browse Files
+            </button>
+          </div>
+          <p className="photo-import-help">
+            If your iPhone says “Unable to Load Photos”, try adding one photo.
+            Or save a JPG/PNG from Photos to Files, then choose Browse Files.
+          </p>
+          <input ref={singlePhotoInputRef} className="visually-hidden"
+            type="file" accept={PHOTO_PICKER_ACCEPT} onChange={handleFiles}
+            aria-label="Add one photo" data-testid="input-single-photo" />
+          <input ref={browseFilesInputRef} className="visually-hidden"
+            type="file" multiple onChange={handleFiles}
+            aria-label="Browse image files" data-testid="input-browse-files" />
 
           {error && (
             <p className="error-message" role="alert" data-testid="status-error">

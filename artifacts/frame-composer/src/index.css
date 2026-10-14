@@ -661,6 +661,20 @@ input:focus-visible {
   font-size: 12px;
 }
 
+.photo-import-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.photo-import-help {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted, #677276);
+  margin: 10px 0 16px;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
