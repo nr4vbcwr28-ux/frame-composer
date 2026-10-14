@@ -1,0 +1,1 @@
+- [PWA manifest source](pwa-manifest-source.md) — keep Frame Composer’s manifest in the Vite PWA config; the build can replace a static manifest with defaults.

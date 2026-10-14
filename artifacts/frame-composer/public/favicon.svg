@@ -1,3 +1,9 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#396B5F"/>
+  <rect x="110" y="92" width="292" height="328" rx="34" fill="#F8F6F0"/>
+  <rect x="140" y="124" width="232" height="238" rx="18" fill="#E8EFEA"/>
+  <circle cx="204" cy="190" r="27" fill="#D99A70"/>
+  <path d="M158 332L222 252L270 301L307 266L354 332V344H158V332Z" fill="#82A68E"/>
+  <path d="M210 344L285 259L354 326V344H210Z" fill="#396B5F"/>
+  <rect x="140" y="378" width="232" height="12" rx="6" fill="#D7BEA2"/>
 </svg>
