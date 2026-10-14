@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Frame Composer"
+description = "A mobile-first browser app for arranging local photos into fixed-ratio collages, previewing layouts, and exporting high-resolution JPG or PNG images."
+version = "1.0.0"
+id = "artifacts/frame-composer"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25247
+
+[services.development]
+run = "pnpm --filter @workspace/frame-composer run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/frame-composer", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/frame-composer/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25247"
+BASE_PATH = "/"
